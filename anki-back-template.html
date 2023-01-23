@@ -1,0 +1,51 @@
+
+<div class="box">
+<span class="Sentence">{{Sentence}}</span>
+<div>{{Pinyin}}<hr/>
+{{English Definition}}<div>
+{{Traditional}} <div>
+{{Character Audio}}{{Sentence Audio}}
+</div><br>
+
+<svg id="characters-container">
+</svg>
+
+<script type="text/javascript">
+  var characters = "{{Character}}".split("")
+  var js = document.createElement("script");
+  js.type = "text/javascript";
+  js.src = "https://cdn.jsdelivr.net/npm/hanzi-writer@2.2/dist/hanzi-writer.min.js";
+  js.onload = function() {
+    var totalWidth = characters.length * 74 + (characters.length - 1) * 5;
+    document.getElementById("characters-container").setAttribute("width", totalWidth);
+    var i = 0;
+    for (x of characters) {
+      // create a new <g> element for each character
+      var characterGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      var offset = (totalWidth - characters.length * 70) / 2;
+      characterGroup.setAttribute("transform", "translate(" + (i * 75 + offset) + ")");
+      characterGroup.innerHTML = "<rect width='70' height='70' fill='white' stroke='#DDD'/>" +
+                "<line x1='0' y1='0' x2='70' y2='70' stroke='#DDD' />" +
+                "<line x1='70' y1='0' x2='0' y2='70' stroke='#DDD' />" +
+                "<line x1='35' y1='0' x2='35' y2='70' stroke='#DDD' />" +
+                "<line x1='0' y1='35' x2='70' y2='35' stroke='#DDD' />";
+
+      // append the character <g> to the container
+      document.getElementById("characters-container").appendChild(characterGroup);
+
+      // create a new instance of the HanziWriter object for the character
+      var writer = HanziWriter.create(characterGroup, x, {
+        width: 70,
+        height: 70,
+        padding: 5,   
+        showOutline: true,
+        strokeAnimationSpeed: 0.5, 
+        delayBetweenStrokes: 200, // milliseconds
+        radicalColor: '#FE7B7C' // salmon
+      });
+      writer.loopCharacterAnimation();
+      i++;
+    };
+  };
+  document.body.appendChild(js);
+</script>
